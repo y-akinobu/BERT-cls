@@ -11,7 +11,7 @@ twine upload --repository pypi dist/*
 '''
 setup(
     name='bertCLS',
-    version='0.0.1', #上げていく
+    version='0.0.2', #上げていく
     url='https://github.com/y-akinobu/BERT-cls.git',
     license='MIT License',
     author='Yuka AKinobu',
