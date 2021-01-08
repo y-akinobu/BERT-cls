@@ -20,7 +20,7 @@ class CreateDataset(Dataset):
     return len(self.y)
 
   def __getitem__(self, index):
-    text = self.X(index)
+    text = self.X[index]
     inputs = self.tokenizer.encode_plus(
       text,
       add_special_tokens = True,
@@ -28,8 +28,8 @@ class CreateDataset(Dataset):
       padding = 'max_length',
       truncation = 'longest_first'
     )
-    ids = inputs('input_ids')
-    mask = inputs('attention_mask')
+    ids = inputs['input_ids']
+    mask = inputs['attention_mask']
 
     return {
       'ids': torch.LongTensor(ids),
