@@ -83,7 +83,7 @@ def train_model(dataset_train, dataset_valid, batch_size, model, criterion, opti
   for epoch in range(num_epochs):
     start_time = time.time()
 
-    model.train()  # TODO: model を追う
+    model.train()
     for data in dataloader_train:
       ids = data['ids'].to(device)
       mask = data['mask'].to(device)
@@ -107,5 +107,25 @@ def train_model(dataset_train, dataset_valid, batch_size, model, criterion, opti
 
   return {'train': log_train, 'valid': log_valid}
 
+def calculate_accuracy(model, dataset, device):
+  loader = DataLoader(dataset, batch_size=len(dataset), shuffle=False)
 
+  model.eval()
+  total = 0
+  correct = 0
+  with torch.no_grad():
+    for data in loader:
+      # デバイスの指定
+      ids = data['ids'].to(device)
+      mask = data['mask'].to(device)
+      labels = data['labels'].to(device)
+
+      # 順伝播 + 予測値の取得 + 正解数のカウント
+      outputs = model.forward(ids, mask)
+      pred = torch.argmax(outputs, dim=-1).cpu().numpy()
+      labels = torch.argmax(labels, dim=-1).cpu().numpy()
+      total += len(labels)
+      correct += (pred == labels).sum().item()
+
+  return correct / total
 
